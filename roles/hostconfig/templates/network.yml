@@ -1,0 +1,17 @@
+# This is the network config written by 'subiquity'
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    {{ IF_MT }}:
+      critical: true
+      dhcp4: false
+  vlans:
+    vlan282:
+      accept-ra: no
+      id: 282
+      link: {{ IF_MT }}
+      addresses: [{{ BZ_IP }}/14]
+      gateway4: 10.101.4.69
+      nameservers:
+        addresses: [119.29.29.29,223.5.5.5]

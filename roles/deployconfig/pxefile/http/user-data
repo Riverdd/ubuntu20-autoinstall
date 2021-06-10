@@ -1,0 +1,16 @@
+#cloud-config
+autoinstall:
+  version: 1
+  user-data:
+    timezone: Asia/Shanghai
+    disable_root: false
+  identity:
+    hostname: ubuntu-server
+    password: "$6$exDY1mhS4KUYCE/2$zmn9ToZwTKLhCw.b4/b.ZRTIZM30JZ4QrOQ2aOXJ8yk96xpcCof0kxKwuX1kqLG/ygbJ1f8wxED22bTL4F46P0"
+    username: ubuntu
+  ssh:
+    allow-pw: true
+    install-server: true
+  early-commands:
+    - curl -G -o /autoinstall.yaml http://192.168.100.20/user-datas/user-data-$(dmidecode -s system-serial-number | grep -v ^#)
+

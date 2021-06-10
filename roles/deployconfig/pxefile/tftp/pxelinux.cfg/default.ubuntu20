@@ -1,0 +1,6 @@
+DEFAULT install
+LABEL install
+    KERNEL /ubuntu20-live/vmlinuz
+    INITRD /ubuntu20-live/initrd
+    APPEND root=/dev/ram0 ramdisk_size=1500000 ip=dhcp url=http://192.168.100.20/ubuntu-20.04.2-live-server-amd64.iso autoinstall ds=nocloud-net;s=http://192.168.100.20/
+

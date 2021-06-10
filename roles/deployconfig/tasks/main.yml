@@ -1,0 +1,69 @@
+---
+- name: install tftp apache dhcp
+  apt:
+    pkg:
+      - tftpd-hpa
+      - isc-dhcp-server
+      - apache2
+
+- name: copy tftpd-hpa configfile
+  template:
+    src: templates/tftpd-hpa.json.j2
+    dest: /etc/default/tftpd-hpa
+    mode: '0644'
+
+- name: copy apache2 configfile
+  template:
+    src: templates/000-default.json.j2
+    dest: /etc/apache2/sites-available/000-default.conf
+    mode: '0644'
+
+- name: copy isc-dhcp-server configfile
+  template: src={{ item.src }} dest={{ item.dest }} mode='0644'
+  with_items:
+    - { src: "templates/dhcpd.json.j2", dest: "/etc/dhcp/dhcpd.conf" }
+    - { src: "templates/isc-dhcp-server.json.j2", dest: "/etc/default/isc-dhcp-server" }
+
+- name: config dhcp ip
+  blockinfile:
+    path: /etc/netplan/01-netcfg.yaml
+    backup: yes
+    insertafter: "ethernets:"
+    block: |4
+            {{ DHCP_INTERFACE }}:
+              dhcp4: false
+              addresses: [192.168.100.20/24]
+
+- name: start dhcp port
+  shell: "netplan apply"
+
+- name: copy pxe config
+  copy: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: "pxefile/tftp/", dest: "{{ TFTP_DIR }}" }
+    - { src: "pxefile/http/", dest: "{{ APACHE2_DIR }}" }
+
+- name: get ubuntu20-live-iso
+  get_url:
+    url: "{{ ISO_URL }}"
+    dest: "{{ APACHE2_DIR }}"
+
+- name: get ubuntu20 initrd vmlinuz
+  shell: |
+    mount {{ APACHE2_DIR }}/ubuntu-20.04.2-live-server-amd64.iso /mnt
+    cp /mnt/casper/vmlinuz {{ TFTP_DIR }}/ubuntu20-live/
+    cp /mnt/casper/initrd {{ TFTP_DIR }}/ubuntu20-live/
+    umount /mnt
+
+- name: get ramdisk initrd vmlinuz
+  unarchive:
+    src: "{{ RAMDISK_URL }}"
+    dest: "{{ TFTP_DIR }}/ramdisk/"
+    remote_src: yes
+
+- name: start pxe services
+  service: name={{ item }} state=started enabled=yes
+  loop:
+    - "tftpd-hpa"
+    - "apache2"
+    - "isc-dhcp-server"

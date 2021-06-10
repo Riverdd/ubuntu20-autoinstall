@@ -1,0 +1,29 @@
+---
+- name: copy file to server
+  copy: src={{ item }} dest=/root/ mode=0777
+  loop:
+    - "../scripts/create-userdata.sh"
+    - "../scripts/megaclisas-status"
+
+- name: get sn
+  shell: "dmidecode -s system-serial-number | grep -v ^#"
+  register: SN
+
+- name: print sn
+  debug: var=SN.stdout_lines
+
+- name: create user-data
+  shell: "/root/create-userdata.sh"
+
+- name: find user-data
+  find:
+    paths: /root
+    patterns: "user-data-*"
+    recurse: no
+  register: file_fetched
+
+- name: copy user-data to www dir
+  fetch:
+    src: "{{ file_fetched.files[0].path }}"
+    dest: /var/www/html/HttpDir/user-datas/
+    flat: yes

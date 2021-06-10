@@ -1,0 +1,6 @@
+---
+APACHE2_DIR: "/var/www/html/HttpDir/"
+DHCP_INTERFACE: "enp60s0f1"
+ISO_URL: ""
+RAMDISK_URL: ""
+TFTP_DIR: "/root/autoinstall/TftpDir"

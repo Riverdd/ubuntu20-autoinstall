@@ -1,0 +1,12 @@
+[deploy]
+localhost
+
+[ram-nodes]
+192.168.100.65
+
+[nodes]
+192.168.100.65  HOSTNAME=ewf-h-0-199 SN=BQWL65350568 BZ_IP=10.101.0.199
+
+[nodes:vars]
+IF_MT=ens785f0
+

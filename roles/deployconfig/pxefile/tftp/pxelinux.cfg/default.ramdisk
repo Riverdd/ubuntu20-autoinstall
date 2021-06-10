@@ -1,0 +1,6 @@
+DEFAULT install
+LABEL install
+    KERNEL /ramdisk/vmlinuz
+    INITRD /ramdisk/initrd.img
+    APPEND ksdevice=bootif lang=  kssendmac text
+
