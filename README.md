@@ -47,7 +47,7 @@ ansible-playbook -i inventory/node setup.yml -t user-data
 autoinstall/roles/userdata/scripts/create-userdata.sh 系统盘路径采集为做了RAID的ssd磁盘， 
 被部署的操作系统为非lvm模式安装，生成个节点sn对应的user-data保存在web发布路径下的user-datas。) 
 
-###检查所有节点user-data是否采集到正确的系统盘路径
+### 检查所有节点user-data是否采集到正确的系统盘路径
 到对应的web发布路径user-datas 
 grep -rn "path:" 
 
