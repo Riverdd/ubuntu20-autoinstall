@@ -17,11 +17,11 @@ Ubuntu18-generic
 ### 部署节点配置
 #### 确认并修改group_vars/all.yml中配置（默认无需修改，如有特殊需求按需修改）
 
-APACHE2_DIR: web发布路径 
-DHCP_INTERFACE: PXE用于dhcp的端口 
-ISO_URL: ubuntu20 live iso下载链接 
-RAMDISK_URL: centos7 ramdisk 下载链接 
-TFTP_DIR: tftp发布路径 
+APACHE2_DIR: web发布路径;
+DHCP_INTERFACE: PXE用于dhcp的端口;
+ISO_URL: ubuntu20 live iso下载链接;
+RAMDISK_URL: centos7 ramdisk 下载链接;
+TFTP_DIR: tftp发布路径
 
 #### 执行命令进行autoinstall配置
 ansible-playbook -i inventory/node setup.yml -t deploy-config
